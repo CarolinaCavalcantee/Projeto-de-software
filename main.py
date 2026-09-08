@@ -29,7 +29,8 @@ trem = Trem(
     "Maceió",
     "Lourdes",
     retrato_trem,
-    "R1"
+    "R1",
+    "no horário"
 )
 
 
