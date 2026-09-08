@@ -1,5 +1,3 @@
-
-"""implementação do requisito fucional de herança"""
 class Transporte:
     def __init__(self, origem, destino, retrato_horario, status):
         self.origem = origem
