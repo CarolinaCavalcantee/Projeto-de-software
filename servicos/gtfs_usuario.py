@@ -1,10 +1,32 @@
+from requests import exceptions
+from google.protobuf import internal
+from modelos import retrato_horario
 import requests
 from google.transit import gtfs_realtime_pb2
+from google.protobuf.message import DecodeError #biblioteca para quando o programa tenta ler uma mensagem em binario corrompida
 
 
 class GtfsUsuario:
     def __init__(self, feed_url: str):
         self.feed_url = feed_url
+    
+    #tratamento de erro quando o feed do gtfs corrompido nao é tratado
+    def _buscar_feed(self) -> gtfs_realtime_pb2.FeedMessage:
+        try:
+            resposta = requests.get(self.feed_url, timeout=10)
+            resposta.raise_for_status()
+        except requests.RequestException as erro:
+            raise requests.RequestException(
+                f"Falha ao buscar feed GTFS em '{self.feed_url}': {erro}"
+            ) from erro
+
+        feed = gtfs_realtime_pb2.FeedMessage()
+        try:
+            feed.ParseFromString(resposta.content)
+        except DecodeError as erro:
+            raise ValueError(f"Feed GTFS retornado em formato inválido: {erro}") from erro
+
+        return feed
 
     def buscar_atualizacoes(self) -> list[dict]:
         resposta = requests.get(self.feed_url, timeout=10)
@@ -50,3 +72,4 @@ class GtfsUsuario:
                 posicoes[v.trip.trip_id] = (v.position.latitude, v.position.longitude)
 
         return posicoes
+

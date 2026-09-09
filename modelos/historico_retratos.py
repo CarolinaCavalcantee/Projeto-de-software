@@ -1,3 +1,5 @@
+from modelos import retrato_horario
+
 class HistoricoRetratos:
     def __init__(self):
         self._retratos = {} #dicionario vazio
@@ -5,7 +7,13 @@ class HistoricoRetratos:
     def registrar(self, id_transporte: str, retrato): #adiciona um retrato novo na pasta certi
         self._retratos.setdefault(id_transporte, []).append(retrato)
     def ultimo(self, id_transporte:str):
-        return self._retratos[id_transporte][-1]
+        try:
+            return self._retratos[id_transporte][-1]
+        except KeyError as erro:
+            raise KeyError(f"Nenhum retrato registrado para o transporte '{id_transporte}'") from erro
+        except IndexError as erro:
+            raise IndexError(f"Histórico de '{id_transporte}' está vazio") from erro
+            
     def penultimo(self, id_transporte:str):
         lista = self._retratos.get(id_transporte, [])
         return lista[-2] if len(lista) >= 2 else None

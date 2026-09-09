@@ -1,5 +1,7 @@
 class Viagem: 
     def __init__(self, trechos:list):
+        if not trechos:
+            raise ValueError("A viagem precisa de pelo menos um trecho (voo, ônibus ou trem).")
         self.trechos = trechos
     
     def atraso_total(self) -> float:

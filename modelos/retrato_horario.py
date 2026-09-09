@@ -1,9 +1,16 @@
+from dotenv import parser
 from datetime import datetime
 
 class Retrato_horario():
-    def __init__(self, horario_programado, horario_real):
-        self.__horario_programado = datetime.strptime(horario_programado,"%H:%M")
-        self.__horario_real = datetime.strptime(horario_real,"%H:%M")
+    def __init__(self, horario_programado, horario_real):#tratamento de erro para caso de horarios
+        try:
+            self.__horario_programado = datetime.strftime("horario_programado, %H:%M")
+            self.__horario_real = datetime.strptime(horario_real, "%H:%M")
+        except(ValueError, TypeError) as erro:
+            raise ValueError(
+                f"Horários inválidos (esperado 'HH:MM'): programado={horario_programado!r}, "
+                f"real={horario_real!r} -> {erro}"
+            ) from erro
 
     @property
     def horario_programado(self):

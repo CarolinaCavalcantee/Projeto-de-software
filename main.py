@@ -1,4 +1,7 @@
 import requests
+import logging 
+logging.basicConfig(level = logging.WARNING, format="[AVISO]%(message)s")
+
 from servicos.aviationstack_usuario import AviationStack
 from servicos.gtfs_usuario import GtfsUsuario
 from api_oculta import AviationStackService, GtfsService
@@ -12,7 +15,13 @@ historico = HistoricoRetratos()
 def buscar_voo():
     try:
         cliente_voo = AviationStack()
-        json_voo = cliente_voo.buscar_voo("SQ8451")  # troca pelo codigo real que voce usa
+        json_voo = cliente_voo.buscar_voo("SQ8451")  
+
+        horario_partida = json_voo.get("departure", {})
+        if not horario_partida.get("estimated") and not horario_partida.get("scheduled"):
+            logging.warning(f"Voo {json_voo.get('flight', {}).get('iata', '?')}: sem horário programado nem estimado")
+            return None
+    
         voo_api = AviationStackService.criar_voo_json(json_voo)
         voo_dominio = montar_voo_dominio(voo_api, "03:00")  # ajusta pro horario programado real
 
@@ -35,16 +44,20 @@ def buscar_onibus():
         atualizacao_valida = None
         for a in atualizacoes:
             paradas = a["trip_update"]["stop_time_update"]
-            if paradas[0]["departure"] and (paradas[-1]["arrival"] or paradas[-1]["departure"]):
-                atualizacao_valida = a
-                break
+            if not paradas or not paradas[0].get("departure") or not (paradas[-1].get("arrival") or paradas[-1].get("departure")):
+                trip_id = a.get("trip_update", {}).get("trip", {}).get("trip_id", "desconhecido")
+                logging.warning(f"Atualização de ônibus {trip_id} : horário incompleto")
+                continue
+
+            atualizacao_valida = a
+            break 
 
         if not atualizacao_valida:
-            print("Nenhuma atualização de ônibus encontrada agora.")
+            print("Nenhuma atualização de ônibus encontrada.")
             return None
 
         onibus_api = GtfsService.criar_onibus_gtfs(atualizacao_valida)
-        onibus_dominio = montar_onibus_dominio(onibus_api, "21:00")  # ajusta pro horario programado real
+        onibus_dominio = montar_onibus_dominio(onibus_api, "21:00") #ajusta pro horario programado real
 
         onibus_dominio.id_transporte = onibus_api.identificador  
         historico.registrar(onibus_dominio.id_transporte, onibus_dominio.retrato_horario)
