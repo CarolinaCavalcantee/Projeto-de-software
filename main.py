@@ -1,7 +1,6 @@
 import requests
 import logging 
 logging.basicConfig(level = logging.WARNING, format="[AVISO]%(message)s")
-
 from servicos.aviationstack_usuario import AviationStack
 from servicos.gtfs_usuario import GtfsUsuario
 from api_oculta import AviationStackService, GtfsService
