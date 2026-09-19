@@ -9,3 +9,5 @@ class RegistroTransportes:
         return era_novo
     def listar(self) -> list:
         return list(self._registros.values())
+    def quantidade(self) -> int:
+        return len(self._registros)

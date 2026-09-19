@@ -4,7 +4,7 @@ from datetime import datetime
 class Retrato_horario():
     def __init__(self, horario_programado, horario_real):#tratamento de erro para caso de horarios
         try:
-            self.__horario_programado = datetime.strftime("horario_programado, %H:%M")
+            self.__horario_programado = datetime.strptime(horario_programado, "%H:%M")
             self.__horario_real = datetime.strptime(horario_real, "%H:%M")
         except(ValueError, TypeError) as erro:
             raise ValueError(
