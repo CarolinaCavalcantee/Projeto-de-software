@@ -14,6 +14,12 @@ class Transporte:
     def exibir_status(self):
         raise NotImplementedError
 
+    #RF9-duplicação de buscas usando polimorfismo
+    def identificador_unico(self):
+        raise NotImplementedError   
+
+    def chave_identificacao(self) -> str:
+        return f"{type(self).__name__}:{self.identificador_unico()}"
 
 class Voo(Transporte):
     def __init__(self, origem, destino, retrato_horario, numero_voo):
@@ -22,39 +28,66 @@ class Voo(Transporte):
 
     def calcular_atraso(self):
         diferenca = self.calcular_diferenca()
-        return 0 if diferenca <= 15 else diferenca #tolerancia de 15min
+        if diferenca <= 15:
+            return 0 
+        else:
+            return diferenca #tolerancia de 15min
 
     def exibir_status(self):
         atraso = self.calcular_atraso()
         horario = self.retrato_horario.horario_real.strftime("%H:%M")
-        status = "No horário" if atraso == 0 else f"Atrasado em {int(atraso)} minutos"
+        if atraso == 0:
+            status = "No horário"  
+        else:
+            status = f"Atrasado em {int(atraso)} minutos"
         return f"Voo {self.numero_voo} -> {horario} {status}"
 
+    def identificador_unico(self):
+        return self.numero_voo   
 
 class Onibus(Transporte):
-    def __init__(self, origem, destino, retrato_horario, linha_onibus):
+    def __init__(self, origem, destino, retrato_horario, linha_onibus, identificador=None):
         super().__init__(origem, destino, retrato_horario)
         self.linha_onibus = linha_onibus
+        if identificador is not None:
+            self.identificador = identificador  
+        else:
+            self.identificador = linha_onibus
 
     def calcular_atraso(self):
         diferenca = self.calcular_diferenca()
-        return 0 if diferenca <= 10 else diferenca
+        if diferenca <= 10:
+            return 0 
+        else:
+            return diferenca
 
     def exibir_status(self):
         atraso = self.calcular_atraso()
         horario = self.retrato_horario.horario_real.strftime("%H:%M")
-        status = "No horário" if atraso == 0 else f"Atrasado em {int(atraso)} minutos"
+        if atraso == 0:
+            status = "No horário"
+        else:
+            status = f"Atrasado em {int(atraso)} minutos"
         return f"Ônibus {self.linha_onibus} -> {horario} {status}"
 
+    def identificador_unico(self):
+        return self.identificador 
 
 class Trem(Transporte):
-    def __init__(self, origem, destino, retrato_horario, linha_trem, status_operadora):
+    def __init__(self, origem, destino, retrato_horario, linha_trem, status_operadora, identificador=None):
         super().__init__(origem, destino, retrato_horario)
         self.linha_trem = linha_trem
-        self.status_operadora = status_operadora 
+        self.status_operadora = status_operadora
+        if identificador is not None:
+            self.identificador = identificador 
+        else:
+            self.identificador = linha_trem
 
     def calcular_atraso(self):
         return 0 if self.status_operadora == "no horário" else 1
 
     def exibir_status(self):
         return f"Trem {self.linha_trem} -> {self.origem} → {self.destino}: {self.status_operadora}"
+
+    def identificador_unico(self):
+        return self.identificador
