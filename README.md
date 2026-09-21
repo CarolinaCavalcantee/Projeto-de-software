@@ -1,15 +1,6 @@
 # Painel de Status de Transportes
 
-<p align="center">
-  <img alt="Python" src="https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white">
-  <img alt="Status" src="https://img.shields.io/badge/status-em%20desenvolvimento-yellow">
-  <img alt="Licença" src="https://img.shields.io/badge/uso-acadêmico-lightgrey">
-  <img alt="UFAL" src="https://img.shields.io/badge/UFAL-Instituto%20de%20Computação-blue">
-</p>
-
-<p align="center">
-  <b>Sistema em Python que monitora voos e ônibus em tempo real, calcula atrasos e notifica usuários inscritos.</b>
-</p>
+>Sistema em Python que monitora voos e ônibus em tempo real, calcula atrasos e notifica usuários inscritos.
 
 > Trabalho prático da disciplina de **Projeto de Software**, lecionada pelo professor **Baldoíno Fonseca**
 > Instituto de Computação (IC) — Universidade Federal de Alagoas (UFAL)
