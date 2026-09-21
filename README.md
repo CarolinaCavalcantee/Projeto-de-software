@@ -1,7 +1,5 @@
 # Painel de Status de Transportes
-
->Sistema em Python que monitora voos e ônibus em tempo real, calcula atrasos e notifica usuários inscritos.
-
+> Sistema em Python que monitora voos e ônibus em tempo real, calcula atrasos e notifica usuários inscritos.
 > Trabalho prático da disciplina de **Projeto de Software**, lecionada pelo professor **Baldoíno Fonseca**
 > Instituto de Computação (IC) — Universidade Federal de Alagoas (UFAL)
 
@@ -15,7 +13,6 @@
 - [Tratamento de erros](#tratamento-de-erros)
 - [Autoras](#autoras)
 
-
 ## Visão geral
 
 O projeto implementa um **sistema de monitoramento de meios de transporte** (voos, ônibus e trens) em Python, consumindo APIs externas em tempo real (AviationStack e GTFS Realtime) e convertendo esses dados brutos em objetos de domínio que sabem calcular seu próprio atraso.
@@ -24,12 +21,11 @@ O projeto implementa um **sistema de monitoramento de meios de transporte** (voo
 
 - Busca dados reais de voos (AviationStack) e ônibus (feed GTFS Realtime);
 - Calcula o atraso de cada transporte comparando horário programado × horário real;
-- Mantém um **painel duplicado**, reconhecendo quando a mesma busca retorna o mesmo transporte;
+- Mantém um **painel deduplicado**, reconhecendo quando a mesma busca retorna o mesmo transporte;
 - Guarda um **histórico de retratos** de horário, permitindo comparar "antes x agora";
 - Agrupa múltiplos trechos (voo + ônibus) em uma **viagem única**;
 - **Notifica** usuários inscritos (e-mail/push) quando um transporte está atrasado.
 
----
 
 ## Conceitos de POO aplicados
 
@@ -199,20 +195,16 @@ Projeto-de-software/
     └── status.py                 # (reservado)
 ```
 
-> **Por que essa separação?** `servicos/` conversa com o mundo real (HTTP, GTFS binário) e devolve objetos simples (`api_oculta.py`). `modelos/` nunca faz requisição — só recebe dados já tratados e aplica as regras de negócio (atraso, status, deduplicação). Isso é o que permite trocar de API sem tocar nas regras de domínio.
-
----
-
 ## Requisitos funcionais implementados
 
 | RF | Descrição | Onde está |
 |---|---|---|
-| **RF5** | Isolamento e tratamento da API externa ("API oculta") | `api_oculta.py` |
-| **RF9** | Reconhecimento de buscas duplicadas / painel deduplicado | `modelos/registro_transportes.py` |
-| **RF10** | Inscrição de usuário e notificação de atraso por canal (e-mail/push) | `modelos/canal_notificacao.py`, `modelos/usuario.py`, `servicos/notificador.py` |
-| — | Validação de coordenadas geográficas (encapsulamento) | `modelos/localizacao.py` |
-| — | Histórico de horários e comparação de atraso ao longo do tempo | `modelos/historico_retratos.py` |
-| — | Viagem com múltiplos trechos (voo + ônibus) | `modelos/viagem.py` |
+| **RF5** | Isolamento e tratamento da API externa ("API oculta") | [`api_oculta.py`](https://github.com/CarolinaCavalcantee/Projeto-de-software/blob/main/api_oculta.py) |
+| **RF9** | Reconhecimento de buscas duplicadas / painel deduplicado | [`modelos/registro_transportes.py`](https://github.com/CarolinaCavalcantee/Projeto-de-software/blob/main/modelos/registro_transportes.py) |
+| **RF10** | Inscrição de usuário e notificação de atraso por canal (e-mail/push) | [`modelos/canal_notificacao.py`](https://github.com/CarolinaCavalcantee/Projeto-de-software/blob/main/modelos/canal_notificacao.py), [`modelos/usuario.py`](https://github.com/CarolinaCavalcantee/Projeto-de-software/blob/main/modelos/usuario.py), [`servicos/notificador.py`](https://github.com/CarolinaCavalcantee/Projeto-de-software/blob/main/servicos/notificador.py) |
+| — | Validação de coordenadas geográficas (encapsulamento) | [`modelos/localizacao.py`](https://github.com/CarolinaCavalcantee/Projeto-de-software/blob/main/modelos/localizacao.py) |
+| — | Histórico de horários e comparação de atraso ao longo do tempo | [`modelos/historico_retratos.py`](https://github.com/CarolinaCavalcantee/Projeto-de-software/blob/main/modelos/historico_retratos.py) |
+| — | Viagem com múltiplos trechos (voo + ônibus) | [`modelos/viagem.py`](https://github.com/CarolinaCavalcantee/Projeto-de-software/blob/main/modelos/viagem.py) |
 
 ## Tratamento de erros
 
@@ -231,7 +223,3 @@ O sistema foi construído para nunca quebrar por causa de um dado externo incons
 - Ana Carolina Cavalcante de Jesus
 - Julia Cabral Melo
 - Maria Luísa Silva Nunes de Souza
-
----
-
-<p align="center"><i>Repositório: <a href="https://github.com/CarolinaCavalcantee/Projeto-de-software">CarolinaCavalcantee/Projeto-de-software</a></i></p>
