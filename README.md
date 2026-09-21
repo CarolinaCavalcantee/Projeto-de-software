@@ -1,7 +1,7 @@
 # Painel de Status de Transportes
 > Sistema em Python que monitora voos e ônibus em tempo real, calcula atrasos e notifica usuários inscritos.
-> Trabalho prático da disciplina de **Projeto de Software**, lecionada pelo professor **Baldoíno Fonseca**
-> Instituto de Computação (IC) — Universidade Federal de Alagoas (UFAL)
+
+> Trabalho prático da disciplina de **Projeto de Software**, lecionada pelo professor **Baldoíno Fonseca** - Instituto de Computação (IC) — Universidade Federal de Alagoas (UFAL)
 
 ## Sumário
 
